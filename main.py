@@ -1,4 +1,4 @@
-#!/home/seva/.config/scripts/projects/tui/config/venv/bin/python3
+#!PATH_TO_YOUR_PYTHON
 import subprocess
 import json
 import os
@@ -6,16 +6,16 @@ import sys
 import npyscreen
 
 EDITOR = str(os.environ.get("EDITOR", "nvim"))
-CONFIG_PATH = "/home/seva/.config/scripts/config.json"
+CONFIG_PATH = "PATH_TO_YOUR_CONFIG.json"
 
 with open(CONFIG_PATH, "r") as file:
     data = json.load(file)
 
-def saveall():
-    subprocess.Popen([
-    "python3",
-    "/home/seva/git/backup/my_configs/main.py"
-], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+# def saveall():
+#     subprocess.Popen([
+#     "python3",
+#     "/home/seva/git/backup/my_configs/main.py"
+# ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 def GetSelection(*args):
     form = npyscreen.Form(name='Config Manager')
