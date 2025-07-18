@@ -1,69 +1,59 @@
-#!/usr/bin/env python3
+#!/home/seva/.config/scripts/projects/tui/config/venv/bin/python3
 import subprocess
 import json
-import argparse
 import os
+import sys
+import npyscreen
 
-EDITOR = str(os.environ.get("EDITOR","nvim"))
+EDITOR = str(os.environ.get("EDITOR", "nvim"))
 CONFIG_PATH = "/home/seva/.config/scripts/config.json"
 
-parser = argparse.ArgumentParser()
-parser.add_argument("name",type=str, nargs="?",help="name of your config file")
-parser.add_argument("-c","--cat",action="store_true" ,help="printing text from your's config file")
-parser.add_argument("-p","--path",action="store_true",help="printing path to your's config file")
-parser.add_argument("-a","--add",nargs=1,help="adding new name+path pair into config.json, you need to use")
-parser.add_argument("-n","--names",action="store_true",help="printing all names for your's config files")
-args = parser.parse_args()
-
-data = {}
-if os.path.isfile(CONFIG_PATH):
-    with open(CONFIG_PATH, "r") as file:
-        data=json.load(file)
-else:
-    print("Make sure that path to the file is correct and directories existing, do you want to create an empty file for configs? \n[y/n]")
-    choice = input()
-    if choice == "y":
-        with open(CONFIG_PATH, "w"):
-            pass
-        print(f"file was create in {CONFIG_PATH}")
-    else:
-        exit()
+with open(CONFIG_PATH, "r") as file:
+    data = json.load(file)
 
 def saveall():
-    subprocess.call([
+    subprocess.Popen([
+    "python3",
     "/home/seva/git/backup/my_configs/main.py"
-])
+], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
-def wrong():
-    print("This name is wrong/you not provide any name, use -n flag to check which names you have, use -a to add new name+path pairs")
+def GetSelection(*args):
+    form = npyscreen.Form(name='Config Manager')
+    myForm = form.add(npyscreen.TitleSelectOne, name='Config to manage', values=list(data.keys()))
+    form.edit()
+    return myForm.value
 
-if args.cat and args.name in data:
-    with open(data[args.name],"r") as config:
+
+if len(sys.argv) < 2:
+
+    selection = npyscreen.wrapper_basic(GetSelection)[0]
+
+    arg = list(data.keys())[selection]
+else:
+    arg = sys.argv[1]
+
+if arg == "-p" and sys.argv[2] in data:
+    print(data[sys.argv[2]])
+    sys.exit()
+if arg == "-c" and sys.argv[2] in data:
+    with open(data[sys.argv[2]], "r") as config:
         print(config.read())
-    exit()
-elif args.cat:
-    wrong()
-
-if args.path and args.name in data:
-    print(data[args.name])
-    exit()
-elif args.path:
-    wrong()
-
-if args.add:
-    data[args.add[0]]=args.name
+    sys.exit()
+if arg == "-a":
+    data[sys.argv[2]] = sys.argv[3]
     with open(CONFIG_PATH, "w") as config:
         json.dump(data, config)
-    print(f"{args.name} was saved as {args.add[0]}")
-    exit()
-
-if args.names:
+    print(f"{sys.argv[3]} was saved as {sys.argv[2]}")
+    sys.exit()
+if arg == "-n":
     print(list(data.keys()))
-    exit()
-
-if args.name in data:
-    filepath = data[args.name]
+    sys.exit()
+if arg == "-h":
+    print("-h for help \n-p for printing path to config file \n-n for printing all existing names for configs\n-c for using \"cat\" on file of config \n-a for adding new config {name_of_config path_to_config_file}")
+    sys.exit()
+if arg in data:
+    filepath = data[arg]
     subprocess.call([EDITOR, filepath])
-    #saveall()
+    saveall()
 else:
-    wrong()
+    print("Config not found")
