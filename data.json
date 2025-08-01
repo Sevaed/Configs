@@ -1,12 +1,76 @@
 {
-  "config":"/home/seva/projects/python/conf/data.json",
-  "hyprland":"/home/seva/.config/hypr/hyprland.conf",
-  "waybar": "/home/seva/.config/waybar/config",
-  "waybar-css": "/home/seva/.config/waybar/style.css",
-  "keybindings": "/home/seva/.config/hypr/custom/keybindings.conf",
-  "autostart":"/home/seva/.config/hypr/custom/autostart.conf",
-  "kitty":"/home/seva/.config/kitty/kitty.conf",
-  "nvim":"/home/seva/.config/nvim/init.lua",
-  "fish":"/home/seva/.config/fish/config.fish"
+  "config_data": {
+    "path": "/home/seva/.config/scripts/config.json",
+    "group": "scripts"
+  },
+  "config": {
+    "path": "/home/seva/.config/scripts/config.py",
+    "group": "scripts"
+  },
+
+  "hyprland": {
+    "path": "/home/seva/.config/hypr/hyprland.conf",
+    "group": "hyprland",
+    "command": ["hyprctl", "reload"]
+  },
+  "keybindings": {
+    "path": "/home/seva/.config/hypr/custom/keybindings.conf",
+    "group": "hyprland"
+  },
+  "autostart": {
+    "path": "/home/seva/.config/hypr/custom/autostart.conf",
+    "group": "hyprland"
+  },
+  "windowrule": {
+    "path": "/home/seva/.config/hypr/custom/windowrule.conf",
+    "group": "hyprland"
+  },
+  "hypr-base": {
+    "path": "/home/seva/.config/hypr/rices/base.conf",
+    "group": "hyprland"
+  },
+  "hypr-solya": {
+    "path": "/home/seva/.config/hypr/rices/solya.conf",
+    "group": "hyprland"
+  },
+
+  "waybar": {
+    "path": "/home/seva/.config/waybar/config",
+    "group": "waybar",
+    "command": ["pkill", "-SIGUSR1", "waybar"]
+  },
+  "waybar-css": {
+    "path": "/home/seva/.config/waybar/style.css",
+    "group": "waybar"
+  },
+
+  "kitty": {
+    "path": "/home/seva/.config/kitty/kitty.conf",
+    "group": "terminal",
+    "command": ["sh", "-c", "kill -SIGUSR1 $(pgrep kitty)"]
+  },
+  "fish": {
+    "path": "/home/seva/.config/fish/config.fish",
+    "group": "terminal",
+    "command": ["fish", "-c", "source ~/.config/fish/config.fish"]
+  },
+
+  "nvim": {
+    "path": "/home/seva/.config/nvim/init.lua",
+    "group": "nvim"
+  },
+  "nvim_lsp": {
+    "path": "/home/seva/.config/nvim/lua/lsp.lua",
+    "group": "nvim"
+  },
+  "nvim_options": {
+    "path": "/home/seva/.config/nvim/lua/options.lua",
+    "group": "nvim"
+  },
+  "nvim_plugins": {
+    "path": "/home/seva/.config/nvim/lua/plugins.lua",
+    "group": "nvim"
+  }
 }
+
 
