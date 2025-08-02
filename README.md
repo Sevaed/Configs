@@ -1,73 +1,112 @@
 # Config Manager
 
-**A minimal terminal-based tool for managing user configuration files.**
+**A minimal terminal-based tool for managing your configuration files.**
+
+---
 
 ## Features
 
-This script provides a convenient interface for working with personal configuration files:
+- **List all configs** with grouping and colored output  
+  ```bash
+  config -n
+  ```
+- **Edit a config** in your preferred editor (defaults to `nvim`)  
+  ```bash
+  config <name>
+  ```
+- **Print the file path** by name  
+  ```bash
+  config -p <name>
+  ```
+- **Show file contents** on screen  
+  ```bash
+  config -c <name>
+  ```
+- **Add a new config** to the index (optional `group` and `command`):  
+  ```bash
+  config -a <name> <path> [group=<group>] [command="<shell command>"]
+  ```
+- **Delete configs**  
+  - By name:  
+    ```bash
+    config -d name <name>
+    ```  
+  - By group (with confirmation):  
+    ```bash
+    config -d group <group>
+    ```
+- **Show help** for all commands:  
+  ```bash
+  config -h
+  ```
 
-* Interactive selection of configs via TUI
-* Editing files in your preferred editor
-* Quick access to file paths by name
-* Viewing file contents
-* Adding new config entries to a JSON index
+---
 
 ## Requirements
 
-Only one Python library is required:
+- Python 3
 
-```bash
-pip install npyscreen
-```
+---
 
-## Setup
+## Script Configuration
 
-1. Create a `config.json` file containing your config names and their absolute paths:
+At the top of `config.py` you can adjust:
 
-```json
-{
-  "nvim": "/home/seva/.config/nvim/init.lua",
-  "waybar": "/home/seva/.config/waybar/config"
-}
-```
-
-2. In the script, adjust the following variables if needed:
-
-* `CONFIG_PATH` — path to your `config.json`
-* `EDITOR` — editor used to open files (defaults to `nvim`)
-* `saveall()` function — by default **commented out**. You can insert any backup mechanism there (e.g., `git`, `rsync`, `rclone`, etc.).
-
-Example:
+- `CONFIG_PATH` — path to your `config.json`  
+- `EDITOR` — editor command (default: `nvim`)  
+- `saveall()` — backup function (Git, rsync, rclone, etc.)
 
 ```python
+EDITOR      = "nvim"
+CONFIG_PATH = "/home/seva/.config/scripts/config.json"
+
 def saveall():
+    # Example: run your backup script
     subprocess.Popen([
         "python3",
         "/home/seva/git/backup/my_configs/main.py"
-    ])
+    ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 ```
 
-Replace the content with your own backup logic or leave it commented out.
+---
 
-## Usage
+## Example `config.json` Structure
 
-```bash
-# Launch TUI interface:
-./config.py
-
-# Print path to config:
-./config.py -p <name>
-
-# Show file content:
-./config.py -c <name>
-
-# Add a new config:
-./config.py -a <name> <path>
-
-# List all config names:
-./config.py -n
-
-# Show help:
-./config.py -h
+```json
+{
+  "fish": {
+    "path": "/home/seva/.config/fish/config.fish",
+    "group": "terminal",
+    "command": ["fish", "-c", "source ~/.config/fish/config.fish"]
+  },
+  "kitty": {
+    "path": "/home/seva/.config/kitty/kitty.conf",
+    "group": "terminal",
+    "command": ["sh", "-c", "kill -SIGUSR1 $(pgrep kitty)"]
+  },
+  "hyprland": {
+    "path": "/home/seva/.config/hypr/hyprland.conf",
+    "group": "hyprland",
+    "command": ["hyprctl", "reload"]
+  },
+  "waybar": {
+    "path": "/home/seva/.config/waybar/config",
+    "group": "waybar",
+    "command": ["pkill", "-SIGUSR1", "waybar"]
+  },
+  "nvim": {
+    "path": "/home/seva/.config/nvim/init.lua",
+    "group": "nvim"
+  }
+}
 ```
 
+---
+
+## TODO (WIP)
+
+- TUI interface via `npyscreen`  
+- Shell autocompletion for `bash`/`fish`  
+- Export/import subsets of configs  
+- Improved error messages and JSON validation  
+- Hot-reload for groups like `nvim` upon change  
