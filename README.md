@@ -105,8 +105,5 @@ def saveall():
 
 ## TODO (WIP)
 
-- TUI interface via `npyscreen`  
-- Shell autocompletion for `bash`/`fish`  
-- Export/import subsets of configs  
-- Improved error messages and JSON validation  
-- Hot-reload for groups like `nvim` upon change  
+- TUI interface
+- Shell autocompletion for `bash`/`fish`      
